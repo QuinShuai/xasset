@@ -40,7 +40,7 @@ namespace XAsset.Editor {
             foreach (var item in rules) {
                 item.Build();
             }
-
+            
 #if ENABLE_ATLAS
 			BuildAtlas(); 
 #endif

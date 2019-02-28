@@ -1,13 +1,15 @@
 manifest:
 	Assets/Manifest.txt
 
-shared/assets/sampleassets_6:
-	Assets/SampleAssets/medal_03.png
+shared/assets/sampleassets/test2_5:
+	Assets/SampleAssets/Test2/medal_03.png
+	Assets/SampleAssets/Test2/medal_04.png
+	Assets/SampleAssets/Test2/medal_01.png
+	Assets/SampleAssets/Test2/medal_05.png
+	Assets/SampleAssets/Test2/medal_02.png
+
+shared/assets/sampleassets_1:
 	Assets/SampleAssets/UnityLogo.png
-	Assets/SampleAssets/medal_04.png
-	Assets/SampleAssets/medal_01.png
-	Assets/SampleAssets/medal_05.png
-	Assets/SampleAssets/medal_02.png
 
 assets/sampleassets/test1/image (2):
 	Assets/SampleAssets/Test1/Image (2).prefab
@@ -19,17 +21,17 @@ assets/sampleassets/test2/canvas:
 	Assets/SampleAssets/Test2/Canvas.prefab
 
 sprites:
-	Assets/SampleAssets/medal_06.png
-	Assets/SampleAssets/medal_07.png
-	Assets/SampleAssets/medal_08.png
-	Assets/SampleAssets/medal_09.png
-	Assets/SampleAssets/medal_10.png
-	Assets/SampleAssets/medal_11.png
-	Assets/SampleAssets/medal_12.png
 	Assets/SampleAssets/medal_13.png
 	Assets/SampleAssets/medal_14.png
 	Assets/SampleAssets/medal_15.png
 	Assets/SampleAssets/medal_16.png
 	Assets/SampleAssets/medal_17.png
 	Assets/SampleAssets/medal_18.png
+	Assets/SampleAssets/Test2/medal_06.png
+	Assets/SampleAssets/Test2/medal_07.png
+	Assets/SampleAssets/Test2/medal_08.png
+	Assets/SampleAssets/Test2/medal_09.png
+	Assets/SampleAssets/Test2/medal_10.png
+	Assets/SampleAssets/Test2/medal_11.png
+	Assets/SampleAssets/Test2/medal_12.png
 
