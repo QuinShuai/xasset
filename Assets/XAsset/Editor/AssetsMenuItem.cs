@@ -4,77 +4,66 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace XAsset.Editor
-{
-    public static class AssetsMenuItem
-	{
-		[MenuItem ("Assets/Copy Asset Path")]
-		static void CopyAssetPath ()
-		{
-			if (EditorApplication.isCompiling) {
-				return;
-			}
-			string path = AssetDatabase.GetAssetPath (Selection.activeInstanceID);   
-			GUIUtility.systemCopyBuffer = path;
-			Debug.Log (string.Format ("systemCopyBuffer: {0}", path));
-		}  
+namespace XAsset.Editor {
+    public static class AssetsMenuItem {
+        [MenuItem("XAsset/Copy Asset Path", false, 0)]
+        static void CopyAssetPath() {
+            if (EditorApplication.isCompiling) {
+                return;
+            }
+            string path = AssetDatabase.GetAssetPath(Selection.activeInstanceID);
+            GUIUtility.systemCopyBuffer = path;
+            Debug.Log(string.Format("systemCopyBuffer: {0}", path));
+        }
 
-		const string kRuntimeMode = "Assets/XAsset/Bundle Mode"; 
+        private const string RuntimeMode = "XAsset/Bundle Mode";
+        [MenuItem(RuntimeMode, false, 100)]
+        public static void ToggleRuntimeMode() {
+            Utility.ActiveBundleMode = !Utility.ActiveBundleMode;
+        }
 
-		[MenuItem (kRuntimeMode)]
-		public static void ToggleRuntimeMode ()
-		{
-            EditorUtility.ActiveBundleMode = !EditorUtility.ActiveBundleMode;  
-		}
+        [MenuItem(RuntimeMode, true, 100)]
+        public static bool ToggleRuntimeModeValidate() {
+            Menu.SetChecked(RuntimeMode, Utility.ActiveBundleMode);
+            return true;
+        }
 
-		[MenuItem (kRuntimeMode, true)]
-		public static bool ToggleRuntimeModeValidate ()
-		{
-            Menu.SetChecked (kRuntimeMode, EditorUtility.ActiveBundleMode);
-			return true;
-		} 
+        private const string AssetsManifesttxt = "Assets/Manifest.txt";
+        [MenuItem("XAsset/Build Manifest", false, 101)]
+        public static void BuildAssetManifest() {
+            if (EditorApplication.isCompiling) {
+                return;
+            }
+            List<AssetBundleBuild> builds = BuildRule.GetBuilds(AssetsManifesttxt);
+            BuildScript.BuildManifest(AssetsManifesttxt, builds);
+        }
 
-		const string assetsManifesttxt = "Assets/Manifest.txt";
+        [MenuItem("XAsset/Build AssetBundles", false, 102)]
+        public static void BuildAssetBundles() {
+            if (EditorApplication.isCompiling) {
+                return;
+            }
+            List<AssetBundleBuild> builds = BuildRule.GetBuilds(AssetsManifesttxt);
+            BuildScript.BuildManifest(AssetsManifesttxt, builds);
+            BuildScript.BuildAssetBundles(builds);
+        }
 
-		[MenuItem ("Assets/XAsset/Build Manifest")]  
-		public static void BuildAssetManifest ()
-		{  
-			if (EditorApplication.isCompiling) {
-				return;
-			}     
-			List<AssetBundleBuild> builds = BuildRule.GetBuilds (assetsManifesttxt);
-            BuildScript.BuildManifest (assetsManifesttxt, builds);
-		}  
-
-		[MenuItem ("Assets/XAsset/Build AssetBundles")]  
-		public static void BuildAssetBundles ()
-		{  
-			if (EditorApplication.isCompiling) {
-				return;
-			}       
-			List<AssetBundleBuild> builds = BuildRule.GetBuilds (assetsManifesttxt);
-            BuildScript.BuildManifest (assetsManifesttxt, builds);
-			BuildScript.BuildAssetBundles (builds);
-		}  
-
-		[MenuItem ("Assets/XAsset/Copy AssetBundles to StreamingAssets")]  
-		public static void CopyAssetBundlesToStreamingAssets ()
-		{  
-			if (EditorApplication.isCompiling) {
-				return;
-			}        
-			BuildScript.CopyAssetBundlesTo (Path.Combine (Application.streamingAssetsPath, EditorUtility.AssetBundlesOutputPath));
+        [MenuItem("XAsset/Copy AssetBundles to StreamingAssets", false, 103)]
+        public static void CopyAssetBundlesToStreamingAssets() {
+            if (EditorApplication.isCompiling) {
+                return;
+            }
+            BuildScript.CopyAssetBundlesTo(Path.Combine(Application.streamingAssetsPath, Utility.AssetBundlesOutputPath));
 
             AssetDatabase.Refresh();
-		}  
+        }
 
-		[MenuItem ("Assets/XAsset/Build Player")]  
-		public static void BuildPlayer ()
-		{
-			if (EditorApplication.isCompiling) {
-				return;
-			}  
-			BuildScript.BuildStandalonePlayer ();
-		}
-	}
+        [MenuItem("XAsset/Build Player", false, 104)]
+        public static void BuildPlayer() {
+            if (EditorApplication.isCompiling) {
+                return;
+            }
+            BuildScript.BuildStandalonePlayer();
+        }
+    }
 }
