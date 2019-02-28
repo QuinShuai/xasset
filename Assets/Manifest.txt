@@ -2,12 +2,15 @@ manifest:
 	Assets/Manifest.txt
 
 shared/assets/sampleassets_6:
-	Assets/SampleAssets/UnityLogo.png
 	Assets/SampleAssets/medal_03.png
+	Assets/SampleAssets/UnityLogo.png
 	Assets/SampleAssets/medal_04.png
 	Assets/SampleAssets/medal_01.png
 	Assets/SampleAssets/medal_05.png
 	Assets/SampleAssets/medal_02.png
+
+assets/sampleassets/test1/image (2):
+	Assets/SampleAssets/Test1/Image (2).prefab
 
 assets/sampleassets/test1/logo:
 	Assets/SampleAssets/Test1/Logo.prefab
