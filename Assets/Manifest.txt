@@ -1,11 +1,32 @@
 manifest:
 	Assets/Manifest.txt
 
-shared/assets/sampleassets_1:
+shared/assets/sampleassets_6:
 	Assets/SampleAssets/UnityLogo.png
+	Assets/SampleAssets/medal_03.png
+	Assets/SampleAssets/medal_04.png
+	Assets/SampleAssets/medal_01.png
+	Assets/SampleAssets/medal_05.png
+	Assets/SampleAssets/medal_02.png
 
-assets/sampleassets/logo:
-	Assets/SampleAssets/Logo.prefab
+assets/sampleassets/test1/logo:
+	Assets/SampleAssets/Test1/Logo.prefab
+
+assets/sampleassets/test2/canvas:
+	Assets/SampleAssets/Test2/Canvas.prefab
 
 sprites:
+	Assets/SampleAssets/medal_06.png
+	Assets/SampleAssets/medal_07.png
+	Assets/SampleAssets/medal_08.png
+	Assets/SampleAssets/medal_09.png
+	Assets/SampleAssets/medal_10.png
+	Assets/SampleAssets/medal_11.png
+	Assets/SampleAssets/medal_12.png
+	Assets/SampleAssets/medal_13.png
+	Assets/SampleAssets/medal_14.png
+	Assets/SampleAssets/medal_15.png
+	Assets/SampleAssets/medal_16.png
+	Assets/SampleAssets/medal_17.png
+	Assets/SampleAssets/medal_18.png
 

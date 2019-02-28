@@ -9,3 +9,10 @@ searchPath=Assets/SampleAssets
 searchPattern=*.png
 searchOption=AllDirectories
 bundleName=sprites
+
+// 如果不填写规则, 所有资源单独打一个AssetBundle包
+[BuildAssetsWithFilename]
+searchPath=Assets/SampleAssets
+searchPattern=*.*
+searchOption=AllDirectories
+bundleName=
