@@ -2,35 +2,32 @@
 using System.IO;
 using UnityEngine;
 
-namespace XAsset
-{
-    public sealed class Assets : MonoBehaviour
-    {
-        static Assets instance; 
+namespace XAsset {
+    public sealed class Assets : MonoBehaviour {
+        static Assets instance;
 
         static Manifest manifest = new Manifest();
         public static string[] allAssetNames { get { return manifest.allAssets; } }
         public static string[] allBundleNames { get { return manifest.allBundles; } }
-        public static string GetBundleName(string assetPath) { return manifest.GetBundleName(assetPath); }
+
+        public static string GetBundleName(string assetPath) {
+            return manifest.GetBundleName(assetPath);
+        }
         public static string GetAssetName(string assetPath) { return manifest.GetAssetName(assetPath); }
 
-        private static void CheckInstance()
-        {
-            if (instance == null)
-            {
+        private static void CheckInstance() {
+            if (instance == null) {
                 var go = new GameObject("Assets");
                 DontDestroyOnLoad(go);
                 instance = go.AddComponent<Assets>();
             }
         }
 
-        public static bool Initialize()
-        {
+        public static bool Initialize() {
             CheckInstance();
 
 #if UNITY_EDITOR
-            if (Utility.ActiveBundleMode)
-            {
+            if (Utility.ActiveBundleMode) {
                 return InitializeBundle();
             }
             return true;
@@ -39,40 +36,41 @@ namespace XAsset
 #endif
         }
 
-        public static void InitializeAsync(System.Action onComplete)
-        {
+        public static void InitializeAsync(System.Action onComplete) {
             CheckInstance();
 
             instance.InitializeBundleAsync(onComplete);
         }
 
-        public static Asset Load<T>(string path) where T : Object
-        {
+        public static Asset Load<T>(string path) where T : Object {
             return Load(path, typeof(T));
         }
 
-        public static Asset Load(string path, System.Type type)
-        {
+        public static Asset Load(string path, System.Type type) {
             return LoadInternal(path, type, false);
         }
 
-        public static Asset LoadAsync<T>(string path)
-        {
+        public static void LoadScene(string path) {
+            LoadInternal(path + ".unity", null, false);
+        }
+
+        public static Asset LoadAsync<T>(string path) {
             return LoadAsync(path, typeof(T));
         }
 
-        public static Asset LoadAsync(string path, System.Type type)
-        {
+        public static Asset LoadAsync(string path, System.Type type) {
             return LoadInternal(path, type, true);
         }
 
-        public static void Unload(Asset asset)
-        {
+        public static void LoadSceneAsync(string path) {
+            LoadInternal(path + ".unity", null, true);
+        }
+
+        public static void Unload(Asset asset) {
             asset.Release();
         }
 
-        static bool InitializeBundle()
-        {
+        static bool InitializeBundle() {
             string relativePath = Path.Combine(Utility.AssetBundlesOutputPath, Utility.GetPlatformName());
             var url =
 #if UNITY_EDITOR
@@ -80,16 +78,12 @@ namespace XAsset
 #else
 				Path.Combine(Application.streamingAssetsPath, relativePath) + "/"; 
 #endif
-            if (Bundles.Initialize(url))
-            {
+            if (Bundles.Initialize(url)) {
                 var bundle = Bundles.Load("manifest");
-                if (bundle != null)
-                {
+                if (bundle != null) {
                     var asset = bundle.LoadAsset<TextAsset>("Manifest.txt");
-                    if (asset != null)
-                    {
-                        using (var reader = new StringReader(asset.text))
-                        {
+                    if (asset != null) {
+                        using (var reader = new StringReader(asset.text)) {
                             manifest.Load(reader);
                             reader.Close();
                         }
@@ -104,8 +98,7 @@ namespace XAsset
             throw new FileNotFoundException("bundle manifest not exist.");
         }
 
-        void InitializeBundleAsync(System.Action onComplete)
-        {
+        void InitializeBundleAsync(System.Action onComplete) {
             string relativePath = Path.Combine(Utility.AssetBundlesOutputPath, Utility.GetPlatformName());
             var url =
 #if UNITY_EDITOR
@@ -114,15 +107,11 @@ namespace XAsset
 				Path.Combine(Application.streamingAssetsPath, relativePath) + "/"; 
 #endif
 
-            StartCoroutine(Bundles.InitializeAsync(url, bundle =>
-            {
-                if (bundle != null)
-                {
+            StartCoroutine(Bundles.InitializeAsync(url, bundle => {
+                if (bundle != null) {
                     var asset = bundle.LoadAsset<TextAsset>("Manifest.txt");
-                    if (asset != null)
-                    {
-                        using (var reader = new StringReader(asset.text))
-                        {
+                    if (asset != null) {
+                        using (var reader = new StringReader(asset.text)) {
                             manifest.Load(reader);
                             reader.Close();
                         }
@@ -132,32 +121,26 @@ namespace XAsset
                     }
                 }
 
-                if (onComplete != null)
-                {
+                if (onComplete != null) {
                     onComplete.Invoke();
                 }
             }));
         }
 
-        static Asset CreateAssetRuntime(string path, System.Type type, bool asyncMode)
-        {
+        static Asset CreateAssetRuntime(string path, System.Type type, bool asyncMode) {
             if (asyncMode)
                 return new BundleAssetAsync(path, type);
             return new BundleAsset(path, type);
         }
 
-        static Asset LoadInternal(string path, System.Type type, bool asyncMode)
-        {
+        static Asset LoadInternal(string path, System.Type type, bool asyncMode) {
             Asset asset = assets.Find(obj => { return obj.assetPath == path; });
-            if (asset == null)
-            {
+            if (asset == null) {
 #if UNITY_EDITOR
-                if (Utility.ActiveBundleMode)
-                {
+                if (Utility.ActiveBundleMode) {
                     asset = CreateAssetRuntime(path, type, asyncMode);
                 }
-                else
-                {
+                else {
                     asset = new Asset(path, type);
                 }
 #else
@@ -166,7 +149,7 @@ namespace XAsset
                 assets.Add(asset);
                 asset.Load();
             }
-            asset.Retain(); 
+            asset.Retain();
             return asset;
         }
 
@@ -174,21 +157,17 @@ namespace XAsset
 
 
         System.Collections.IEnumerator gc = null;
-        System.Collections.IEnumerator GC()
-        {
-			System.GC.Collect ();
+        System.Collections.IEnumerator GC() {
+            System.GC.Collect();
             yield return 0;
             yield return Resources.UnloadUnusedAssets();
         }
 
-        void Update()
-        {
+        void Update() {
             bool removed = false;
-            for (int i = 0; i < assets.Count; i++)
-            {
+            for (int i = 0; i < assets.Count; i++) {
                 var asset = assets[i];
-                if (! asset.Update() && asset.references <= 0)
-                {
+                if (!asset.Update() && asset.references <= 0) {
                     asset.Unload();
                     asset = null;
                     assets.RemoveAt(i);
@@ -197,11 +176,9 @@ namespace XAsset
                 }
             }
 
-            if (removed)
-            {
-                if (gc != null)
-                {
-                    StopCoroutine(gc); 
+            if (removed) {
+                if (gc != null) {
+                    StopCoroutine(gc);
                 }
                 gc = GC();
                 StartCoroutine(gc);
